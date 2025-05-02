@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mejango | Next-Gen Database</title>
+    <title>Mejango</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     <style>
         :root {
             --primary: #6c5ce7;
@@ -13,6 +14,8 @@
             --light: #f5f6fa;
             --accent: #fd79a8;
             --success: #00b894;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
         }
 
         * {
@@ -48,7 +51,7 @@
             padding: 0 20px;
         }
 
-        /* Header */
+        /* Glass Header */
         header {
             padding: 20px 0;
             position: fixed;
@@ -56,15 +59,17 @@
             top: 0;
             left: 0;
             z-index: 100;
-            background: rgba(45, 52, 54, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
             transition: all 0.3s ease;
         }
 
         header.scrolled {
-            padding: 10px 0;
-            background: rgba(45, 52, 54, 0.95);
+            padding: 15px 0;
+            background: rgba(45, 52, 54, 0.85);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
         nav {
@@ -349,6 +354,13 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+        }
+
+        .pricing-card.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(108, 92, 231, 0.4);
+            transform: scale(1.02);
         }
 
         .pricing-card.popular {
@@ -403,6 +415,111 @@
         .pricing-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Payment Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--dark);
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .selected-plan-info {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(108, 92, 231, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .selected-plan-info h3 {
+            margin-bottom: 10px;
+        }
+
+        .selected-plan-info .price {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .payment-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .payment-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .payment-form input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+
+        .payment-form .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .payment-form .form-row .form-group {
+            flex: 1;
+        }
+
+        .payment-form button[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .payment-form button[type="submit"]:hover {
+            background: var(--secondary);
         }
 
         /* Contact Section */
@@ -543,7 +660,22 @@
 
         @media (max-width: 768px) {
             .nav-links {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: rgba(45, 52, 54, 0.95);
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                gap: 20px;
                 display: none;
+                backdrop-filter: blur(10px);
+                border-bottom: 1px solid var(--glass-border);
+            }
+            
+            .nav-links.active {
+                display: flex;
             }
             
             .mobile-menu-btn {
@@ -570,6 +702,11 @@
             .section-title {
                 font-size: 2rem;
             }
+
+            .modal-content {
+                padding: 30px 20px;
+                width: 95%;
+            }
         }
 
         @media (max-width: 576px) {
@@ -588,6 +725,11 @@
             
             .cta-button, .secondary-button {
                 width: 100%;
+            }
+
+            .payment-form .form-row {
+                flex-direction: column;
+                gap: 0;
             }
         }
     </style>
@@ -610,10 +752,10 @@
                     <a href="#demo">Demo</a>
                     <a href="#pricing">Pricing</a>
                     <a href="#contact">Contact</a>
-                    <button class="cta-button">Get Started</button>
+                    <button class="cta-button" id="open-plans">Get Started</button>
                 </div>
                 
-                <button class="mobile-menu-btn">
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
                     <i class="fas fa-bars"></i>
                 </button>
             </nav>
@@ -629,7 +771,7 @@
                 </h1>
                 <p>The next-generation database solution with unmatched performance, security, and developer experience.</p>
                 <div class="hero-buttons">
-                    <button class="cta-button">Start Free Trial</button>
+                    <button class="cta-button" id="hero-cta">Start Free Trial</button>
                     <button class="secondary-button">View Documentation</button>
                 </div>
             </div>
@@ -706,8 +848,8 @@
     <section class="section" id="pricing">
         <div class="container">
             <h2 class="section-title">Simple, Transparent Pricing</h2>
-            <div class="pricing-grid">
-                <div class="pricing-card">
+            <div class="pricing-grid" id="pricing-grid">
+                <div class="pricing-card" data-plan="starter">
                     <h3>Starter</h3>
                     <div class="price">$0<span>/month</span></div>
                     <ul class="pricing-features">
@@ -716,10 +858,10 @@
                         <li>Community support</li>
                         <li>3 projects</li>
                     </ul>
-                    <button class="secondary-button">Get Started</button>
+                    <button class="secondary-button select-plan">Select Plan</button>
                 </div>
                 
-                <div class="pricing-card popular">
+                <div class="pricing-card popular" data-plan="professional">
                     <div class="popular-badge">Most Popular</div>
                     <h3>Professional</h3>
                     <div class="price">$29<span>/month</span></div>
@@ -730,10 +872,10 @@
                         <li>Unlimited projects</li>
                         <li>Daily backups</li>
                     </ul>
-                    <button class="cta-button">Start Free Trial</button>
+                    <button class="cta-button select-plan">Select Plan</button>
                 </div>
                 
-                <div class="pricing-card">
+                <div class="pricing-card" data-plan="enterprise">
                     <h3>Enterprise</h3>
                     <div class="price">Custom</div>
                     <ul class="pricing-features">
@@ -743,11 +885,55 @@
                         <li>Custom SLAs</li>
                         <li>On-premise options</li>
                     </ul>
-                    <button class="secondary-button">Contact Sales</button>
+                    <button class="secondary-button select-plan">Select Plan</button>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="payment-modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-modal">&times;</button>
+            <h2 class="modal-title">Complete Your Purchase</h2>
+            
+            <div class="selected-plan-info" id="selected-plan-info">
+                <h3 id="plan-name">Professional Plan</h3>
+                <div class="price" id="plan-price">$29<span>/month</span></div>
+            </div>
+            
+            <form class="payment-form" id="payment-form">
+                <div class="form-group">
+                    <label for="card-name">Name on Card</label>
+                    <input type="text" id="card-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="card-number">Card Number</label>
+                    <input type="text" id="card-number" placeholder="4242 4242 4242 4242" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="card-expiry">Expiry Date</label>
+                        <input type="text" id="card-expiry" placeholder="MM/YY" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card-cvc">CVC</label>
+                        <input type="text" id="card-cvc" placeholder="123" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="cta-button">
+                    <span id="submit-text">Pay $29/month</span>
+                    <span id="loading-spinner" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Processing...
+                    </span>
+                </button>
+            </form>
+        </div>
+    </div>
 
     <!-- Contact Section -->
     <section class="section" id="contact">
@@ -836,6 +1022,8 @@
         </div>
     </footer>
 
+    <!-- Payment Processing Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@stripe/stripe-js@3.0.0"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         // Typewriter Effect
@@ -988,18 +1176,18 @@
         });
         
         // Mobile Menu Toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');
         
         mobileMenuBtn.addEventListener('click', () => {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.classList.toggle('active');
         });
         
         // Close mobile menu when clicking on a link
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 if (window.innerWidth <= 768) {
-                    navLinks.style.display = 'none';
+                    navLinks.classList.remove('active');
                 }
             });
         });
@@ -1047,6 +1235,130 @@
         
         window.addEventListener('scroll', animateOnScroll);
         window.addEventListener('load', animateOnScroll);
+
+        // Plan Selection Logic
+        const pricingCards = document.querySelectorAll('.pricing-card');
+        const paymentModal = document.getElementById('payment-modal');
+        const openPlansBtn = document.getElementById('open-plans');
+        const heroCtaBtn = document.getElementById('hero-cta');
+        const closeModalBtn = document.getElementById('close-modal');
+        const planNameElement = document.getElementById('plan-name');
+        const planPriceElement = document.getElementById('plan-price');
+        const paymentForm = document.getElementById('payment-form');
+        const submitText = document.getElementById('submit-text');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        let selectedPlan = null;
+
+        // Select plan handler
+        pricingCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                // Don't trigger if clicking the select button
+                if (e.target.classList.contains('select-plan')) return;
+                
+                pricingCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                
+                // Set selected plan
+                selectedPlan = card.getAttribute('data-plan');
+                
+                // Update modal with selected plan info
+                const planTitle = card.querySelector('h3').textContent;
+                const planPrice = card.querySelector('.price').textContent;
+                
+                planNameElement.textContent = `${planTitle} Plan`;
+                planPriceElement.innerHTML = planPrice;
+                
+                // Update submit button text
+                if (selectedPlan === 'enterprise') {
+                    submitText.textContent = 'Contact Sales';
+                } else {
+                    submitText.textContent = `Pay ${planPrice}`;
+                }
+                
+                // Open modal
+                paymentModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Open modal from header CTA (default to professional plan)
+        openPlansBtn.addEventListener('click', () => {
+            const professionalCard = document.querySelector('.pricing-card[data-plan="professional"]');
+            professionalCard.click();
+        });
+
+        // Open modal from hero CTA (default to professional plan)
+        heroCtaBtn.addEventListener('click', () => {
+            const professionalCard = document.querySelector('.pricing-card[data-plan="professional"]');
+            professionalCard.click();
+        });
+
+        // Close modal
+        closeModalBtn.addEventListener('click', closeModal);
+        paymentModal.addEventListener('click', (e) => {
+            if (e.target === paymentModal) {
+                closeModal();
+            }
+        });
+
+        function closeModal() {
+            paymentModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Payment form submission
+        paymentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (selectedPlan === 'enterprise') {
+                // Redirect to contact form for enterprise
+                window.location.href = '#contact';
+                closeModal();
+                return;
+            }
+            
+            // Show loading state
+            submitText.style.display = 'none';
+            loadingSpinner.style.display = 'inline';
+            
+            // Simulate payment processing
+            try {
+                // In a real app, you would integrate with Stripe.js here
+                // This is just a simulation
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Show success message
+                alert(`Thank you for subscribing to the ${selectedPlan} plan!`);
+                closeModal();
+                
+                // Reset form
+                paymentForm.reset();
+            } catch (error) {
+                alert('Payment failed. Please try again.');
+                console.error(error);
+            } finally {
+                // Reset loading state
+                submitText.style.display = 'inline';
+                loadingSpinner.style.display = 'none';
+            }
+        });
+
+        // Initialize Stripe (mock implementation)
+        async function initializeStripe() {
+            try {
+                // In a real implementation, you would load Stripe.js like this:
+                // const stripe = Stripe('your_publishable_key');
+                // And use it to process payments
+                
+                console.log('Payment processor initialized');
+            } catch (error) {
+                console.error('Failed to initialize payment processor:', error);
+            }
+        }
+
+        // Initialize payment processor on load
+        window.addEventListener('load', initializeStripe);
     </script>
 </body>
 </html>
